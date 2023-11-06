@@ -1,0 +1,3 @@
+.PHONY: clean test
+test:
+	go test ./...
