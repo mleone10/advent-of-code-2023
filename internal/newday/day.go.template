@@ -1,0 +1,5 @@
+package day{{ printf "%02d" .DayNum }}
+
+type Day{{ printf "%02d" .DayNum }} struct {
+  Input string
+}
