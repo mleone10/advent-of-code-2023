@@ -6,10 +6,10 @@ import (
 	"github.com/mleone10/advent-of-code-2023/internal/assert"
 )
 
-func AssertArrayEquals(t *testing.T) {
+func TestArrayEqualsInt(t *testing.T) {
 	tcs := []struct {
-		a, b     []int
-		expected bool
+		a, b          []int
+		expectedEqual bool
 	}{
 		{
 			[]int{1, 2, 3, 4, 5},
@@ -29,9 +29,53 @@ func AssertArrayEquals(t *testing.T) {
 	}
 
 	for _, tc := range tcs {
-		actual := assert.ArrayEquals(tc.a, tc.b)
-		if actual != tc.expected {
-			t.Errorf("expected [%v], got [%v]", tc.expected, actual)
+		u := testing.T{}
+		assert.ArrayEquals(&u, tc.a, tc.b)
+		if u.Failed() == tc.expectedEqual {
+			t.Errorf("expected [%v] and [%v] equality to be [%v], got [%v]", tc.a, tc.b, tc.expectedEqual, !u.Failed())
+		}
+	}
+}
+
+func TestEqualsInt(t *testing.T) {
+	tcs := []struct {
+		a, b          int
+		expectedEqual bool
+	}{
+		{
+			5, 5, true,
+		},
+		{
+			5, 10, false,
+		},
+	}
+
+	for _, tc := range tcs {
+		u := testing.T{}
+		assert.Equals(&u, tc.a, tc.b)
+		if u.Failed() == tc.expectedEqual {
+			t.Errorf("expected [%v] and [%v] equality to be [%v], got [%v]", tc.a, tc.b, tc.expectedEqual, !u.Failed())
+		}
+	}
+}
+func TestEqualsString(t *testing.T) {
+	tcs := []struct {
+		a, b          string
+		expectedEqual bool
+	}{
+		{
+			"foo", "foo", true,
+		},
+		{
+			"foo", "bar", false,
+		},
+	}
+
+	for _, tc := range tcs {
+		u := testing.T{}
+		assert.Equals(&u, tc.a, tc.b)
+		if u.Failed() == tc.expectedEqual {
+			t.Errorf("expected [%v] and [%v] equality to be [%v], got [%v]", tc.a, tc.b, tc.expectedEqual, !u.Failed())
 		}
 	}
 }

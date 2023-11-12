@@ -16,12 +16,12 @@ var (
 )
 
 func TestMap(t *testing.T) {
-	assert.ArrayEquals(slice.Map([]string{"a", "b", "c"}, strings.ToUpper), []string{"A", "B", "C"})
-	assert.ArrayEquals(slice.Map([]string{"fizz", "buzz", "hello"}, strLength), []int{4, 4, 5})
-	assert.ArrayEquals(slice.Map([]int{2, 3, 4}, intDouble), []int{4, 6, 8})
+	assert.ArrayEquals(t, slice.Map([]string{"a", "b", "c"}, strings.ToUpper), []string{"A", "B", "C"})
+	assert.ArrayEquals(t, slice.Map([]string{"fizz", "buzz", "hello"}, strLength), []int{4, 4, 5})
+	assert.ArrayEquals(t, slice.Map([]int{2, 3, 4}, intDouble), []int{4, 6, 8})
 }
 
 func TestFilter(t *testing.T) {
-	assert.ArrayEquals(slice.Filter([]int{1, 2, 3, 4, 5}, isEven), []int{2, 4})
-	assert.ArrayEquals(slice.Filter([]string{"FIZZ", "bUZz", "foO", "BAR"}, isUpper), []string{"FIZZ", "BAR"})
+	assert.ArrayEquals(t, slice.Filter([]int{1, 2, 3, 4, 5}, isEven), []int{2, 4})
+	assert.ArrayEquals(t, slice.Filter([]string{"FIZZ", "bUZz", "foO", "BAR"}, isUpper), []string{"FIZZ", "BAR"})
 }
