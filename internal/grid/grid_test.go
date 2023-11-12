@@ -79,3 +79,15 @@ func TestReduce(t *testing.T) {
 
 	assert.Equals(t, 20, actual)
 }
+
+func TestLength(t *testing.T) {
+	g := grid.Grid[string]{}
+	g.Set(1, 1, "foo")
+	g.Set(2, 2, "bar")
+	g.Set(3, 3, "fizz")
+	g.Set(4, 4, "buzz")
+
+	actual := grid.Length(g)
+
+	assert.Equals(t, 4, actual)
+}
