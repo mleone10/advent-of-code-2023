@@ -33,9 +33,12 @@ func NewLightGrid(input string) *LightGrid {
 }
 
 func (lg *LightGrid) NumOn() int {
-	return grid.Length(grid.Filter(lg.grid, func(g grid.Grid[*Light], x, y int, v *Light) bool {
-		return v.on
-	}))
+	return grid.Reduce(lg.grid, 0, func(g grid.Grid[*Light], x, y int, v *Light, res int) int {
+		if v.on {
+			return res + 1
+		}
+		return res
+	})
 }
 
 func (lg *LightGrid) Step() {
