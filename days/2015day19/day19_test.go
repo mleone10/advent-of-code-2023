@@ -24,13 +24,19 @@ var tcs = []struct {
 		testInput,
 		"HOH",
 		4,
-		0,
+		3,
+	},
+	{
+		testInput,
+		"HOHOHO",
+		7,
+		6,
 	},
 	{
 		input,
 		"CRnCaSiRnBSiRnFArTiBPTiTiBFArPBCaSiThSiRnTiBPBPMgArCaSiRnTiMgArCaSiThCaSiRnFArRnSiRnFArTiTiBFArCaCaSiRnSiThCaCaSiRnMgArFYSiRnFYCaFArSiThCaSiThPBPTiMgArCaPRnSiAlArPBCaCaSiRnFYSiThCaRnFArArCaCaSiRnPBSiRnFArMgYCaCaCaCaSiThCaCaSiAlArCaCaSiRnPBSiAlArBCaCaCaCaSiThCaPBSiThPBPBCaSiRnFYFArSiThCaSiRnFArBCaCaSiRnFYFArSiThCaPBSiThCaSiRnPMgArRnFArPTiBCaPRnFArCaCaCaCaSiRnCaCaSiRnFYFArFArBCaSiThFArThSiThSiRnTiRnPMgArFArCaSiThCaPBCaSiRnBFArCaCaPRnCaCaPMgArSiRnFYFArCaSiThRnPBPMgAr",
 		509,
-		0,
+		195,
 	},
 }
 
@@ -42,4 +48,10 @@ func TestSolvePartOne(t *testing.T) {
 	}
 }
 
-func TestSolvePartTwo(t *testing.T) {}
+func TestSolvePartTwo(t *testing.T) {
+	for _, tc := range tcs {
+		r := day19.NewReplacements(tc.replacements)
+		actual := day19.FabricationLength(tc.initMolecule, r)
+		assert.Equals(t, tc.expectedPartTwo, actual)
+	}
+}

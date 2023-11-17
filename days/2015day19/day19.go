@@ -1,8 +1,10 @@
 package day19
 
 import (
+	"math/rand"
 	"strings"
 
+	"github.com/mleone10/advent-of-code-2023/internal/mp"
 	"github.com/mleone10/advent-of-code-2023/internal/set"
 	"github.com/mleone10/advent-of-code-2023/internal/str"
 )
@@ -31,4 +33,41 @@ func CalibrationSum(init string, repl Replacements) int {
 		}
 	}
 	return uniqMols.Size()
+}
+
+func FabricationLength(init string, repl Replacements) int {
+	rev := reverseReplacements(repl)
+	dests := mp.Keys(rev)
+
+	steps := 0
+	s := init
+	for s != "e" {
+		changeMade := false
+		for _, d := range dests {
+			reps := strings.Count(s, d)
+			if reps == 0 {
+				continue
+			}
+			s = strings.Replace(s, d, rev[d], 1)
+			steps++
+			changeMade = true
+			break
+		}
+		if !changeMade {
+			rand.Shuffle(len(dests), func(i, j int) { dests[i], dests[j] = dests[j], dests[i] })
+			steps = 0
+			s = init
+		}
+	}
+	return steps
+}
+
+func reverseReplacements(repl Replacements) map[string]string {
+	rev := map[string]string{}
+	for k, v := range repl {
+		for _, r := range v {
+			rev[r] = k
+		}
+	}
+	return rev
 }
