@@ -1,15 +1,28 @@
 package assert
 
-import "testing"
+import (
+	"sort"
+	"testing"
 
-func ArrayEquals[T comparable](t *testing.T, expected, actual []T) {
+	"golang.org/x/exp/constraints"
+)
+
+func ArrayEquals[T constraints.Ordered](t *testing.T, expected, actual []T) {
 	if len(expected) != len(actual) {
 		t.Errorf("expected [%v] with length [%v], got [%v] with length [%v]", expected, len(expected), actual, len(actual))
 		return
 	}
-	for i, v := range expected {
-		if actual[i] != v {
-			t.Errorf("expected element [%v] of [%v] to be [%v], got [%v]", i, actual, v, actual[i])
+
+	var exp, act []T
+	copy(expected, exp)
+	copy(actual, act)
+
+	sort.Slice(exp, func(i, j int) bool { return exp[i] < exp[j] })
+	sort.Slice(act, func(i, j int) bool { return act[i] < act[j] })
+
+	for i, v := range exp {
+		if act[i] != v {
+			t.Errorf("expected element [%v] of [%v] to be [%v], got [%v]", i, act, v, act[i])
 			return
 		}
 	}
