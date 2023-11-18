@@ -9,7 +9,7 @@ import (
 
 func ArrayEquals[T constraints.Ordered](t *testing.T, expected, actual []T) {
 	if len(expected) != len(actual) {
-		t.Errorf("expected [%v] with length [%v], got [%v] with length [%v]", expected, len(expected), actual, len(actual))
+		t.Errorf("expected %v with length [%v], got %v with length [%v]", expected, len(expected), actual, len(actual))
 		return
 	}
 
