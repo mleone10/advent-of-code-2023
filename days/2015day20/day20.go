@@ -1,27 +1,21 @@
 package day20
 
-import (
-	"github.com/mleone10/advent-of-code-2023/internal/maths"
-)
+import "math"
 
-// Today's puzzle seems to be all about prime numbers.  Specifically, the elves that visit a house are those whose numbers are the prime factors of the given house's number.
-
-func FindHouseWithMinPresents(n int) int {
-	for i := 0; ; i++ {
-		if CalcPresents(i) >= n {
-			return i
+func FindHouseWithMinPresents(minPresents, maxHousesPerElf, presentsPerHouse int) int {
+	houses := map[int]int{}
+	for i := 1; i <= minPresents; i++ {
+		for j, visits := i, 0; j <= minPresents/presentsPerHouse+presentsPerHouse && visits < maxHousesPerElf; j, visits = j+i, visits+1 {
+			houses[j] += i * presentsPerHouse
 		}
 	}
-}
 
-func CalcPresents(house int) int {
-	fs := maths.Factors(house)
-
-	p := 0
-	// TODO: refactor this to use a slice.Reduce function
-	for _, f := range fs {
-		p += f
+	min := math.MaxInt
+	for h, ps := range houses {
+		if ps >= minPresents && h < min {
+			min = h
+		}
 	}
 
-	return p * 10
+	return min
 }

@@ -13,36 +13,29 @@ var tcs = []struct {
 	expectedPartTwo int
 }{
 	{
-		10, 1, 0,
+		10, 1, 1,
 	},
 	{
-		70, 4, 0,
+		70, 4, 4,
 	},
 	{
-		150, 8, 0,
+		150, 8, 8,
 	},
 	{
-		36000000, 0, 0,
+		36000000, 831600, 884520,
 	},
-}
-
-func CalcPresents(t *testing.T) {
-	ts := map[int]int{
-		1: 10,
-		4: 70,
-		7: 80,
-		8: 150,
-	}
-	for n, ps := range ts {
-		assert.Equals(t, day20.CalcPresents(n), ps)
-	}
 }
 
 func TestSolvePartOne(t *testing.T) {
 	for _, tc := range tcs {
-		actual := day20.FindHouseWithMinPresents(tc.input)
+		actual := day20.FindHouseWithMinPresents(tc.input, tc.input/10, 10)
 		assert.Equals(t, tc.expectedPartOne, actual)
 	}
 }
 
-func TestSolvePartTwo(t *testing.T) {}
+func TestSolvePartTwo(t *testing.T) {
+	for _, tc := range tcs {
+		actual := day20.FindHouseWithMinPresents(tc.input, 50, 11)
+		assert.Equals(t, tc.expectedPartTwo, actual)
+	}
+}
