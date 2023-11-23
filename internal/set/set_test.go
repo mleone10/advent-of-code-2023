@@ -24,3 +24,11 @@ func TestAddMultiple(t *testing.T) {
 
 	assert.Equals(t, 3, s.Size())
 }
+
+func TestSlice(t *testing.T) {
+	s := set.Set[int]{}
+
+	s.Add([]int{1, 2, 3}...)
+
+	assert.ArrayEquals(t, []int{1, 2, 3}, s.Slice())
+}
