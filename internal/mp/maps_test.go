@@ -23,3 +23,12 @@ func TestKeys(t *testing.T) {
 		assert.ArrayEquals(t, tc.expected, actual)
 	}
 }
+
+func TestMerge(t *testing.T) {
+	mapA := map[int]int{1: 2, 3: 4, 5: 6}
+	mapB := map[int]int{7: 8, 9: 10}
+	mapC := map[int]int{11: 12, 13: 14, 15: 16, 1: 2}
+
+	actual := mp.Merge(mapA, mapB, mapC)
+	assert.Equals(t, 8, len(actual))
+}

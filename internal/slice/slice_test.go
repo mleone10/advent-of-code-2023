@@ -25,3 +25,13 @@ func TestFilter(t *testing.T) {
 	assert.ArrayEquals(t, slice.Filter([]int{1, 2, 3, 4, 5}, isEven), []int{2, 4})
 	assert.ArrayEquals(t, slice.Filter([]string{"FIZZ", "bUZz", "foO", "BAR"}, isUpper), []string{"FIZZ", "BAR"})
 }
+
+func TestTrimSplit(t *testing.T) {
+	input := `
+	foo
+	bar
+	fizz
+	buzz
+	`
+	assert.ArrayEquals(t, []string{"foo", "bar", "fizz", "buzz"}, slice.TrimSplit(input))
+}
