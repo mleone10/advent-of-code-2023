@@ -23,12 +23,12 @@ var tcs = []struct {
 	{
 		testInput,
 		13,
-		0,
+		30,
 	},
 	{
 		input,
 		21138,
-		0,
+		7185540,
 	},
 }
 

@@ -3,6 +3,7 @@ package day04
 import (
 	"strings"
 
+	"github.com/mleone10/advent-of-code-2023/internal/mp"
 	"github.com/mleone10/advent-of-code-2023/internal/mth"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
@@ -22,7 +23,21 @@ func PilePoints(ls []string) int {
 }
 
 func NumCards(ls []string) int {
-	return 0
+	// I actually had this solved with plain for-loops, but wanted to play with converting it to use slice.Reduce instead.  It's less readable, but I had fun with the exercise.
+	return slice.Reduce(mp.Values(slice.Reduce(parseGames(ls), map[int]int{}, func(g game, numCards map[int]int) map[int]int {
+		if _, ok := numCards[g.id]; !ok {
+			numCards[g.id] = 1
+		} else {
+			numCards[g.id] += 1
+		}
+		numWinners := numWinners(g)
+		for i := 1; i <= numWinners; i++ {
+			numCards[g.id+i] += numCards[g.id]
+		}
+		return numCards
+	})), 0, func(n, ret int) int {
+		return ret + n
+	})
 }
 
 func parseGames(ls []string) []game {
