@@ -64,3 +64,14 @@ func Length[T comparable](g Grid[T]) int {
 		return init + 1
 	})
 }
+
+// Points returns a slice of all populated grid.Points of the given grid.
+func Points[T comparable](g Grid[T]) []Point {
+	points := []Point{}
+	for y, r := range g.points {
+		for x := range r {
+			points = append(points, Point{X: x, Y: y})
+		}
+	}
+	return points
+}

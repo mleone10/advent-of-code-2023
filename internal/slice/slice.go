@@ -22,6 +22,15 @@ func Filter[S any](arr []S, f func(S) bool) []S {
 	return res
 }
 
+// Reduce
+func Reduce[R, S any](arr []S, init R, f func(s S, r R) R) R {
+	res := init
+	for _, s := range arr {
+		res = f(s, res)
+	}
+	return res
+}
+
 // TrimSplit splits a string on newline characters after trimming leading and trailing whitespace.  This ensures that the resultant slice contains no empty strings.
 func TrimSplit(s string) []string {
 	return strings.Split(strings.TrimSpace(s), "\n")
