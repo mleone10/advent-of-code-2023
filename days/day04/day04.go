@@ -24,7 +24,7 @@ func PilePoints(ls []string) int {
 
 func NumCards(ls []string) int {
 	// I actually had this solved with plain for-loops, but wanted to play with converting it to use slice.Reduce instead.  It's less readable, but I had fun with the exercise.
-	return slice.Reduce(mp.Values(slice.Reduce(parseGames(ls), map[int]int{}, func(g game, numCards map[int]int) map[int]int {
+	return slice.Sum(mp.Values(slice.Reduce(parseGames(ls), map[int]int{}, func(g game, numCards map[int]int) map[int]int {
 		if _, ok := numCards[g.id]; !ok {
 			numCards[g.id] = 1
 		} else {
@@ -35,9 +35,7 @@ func NumCards(ls []string) int {
 			numCards[g.id+i] += numCards[g.id]
 		}
 		return numCards
-	})), 0, func(n, ret int) int {
-		return ret + n
-	})
+	})))
 }
 
 func parseGames(ls []string) []game {
