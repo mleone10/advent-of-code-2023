@@ -2,6 +2,10 @@ package slice
 
 import "strings"
 
+type summable interface {
+	int
+}
+
 // Map applies a function `f` to each element in a slice `arr`, returning a new slice of the results of `f`.
 func Map[S, R any](arr []S, f func(S) R) []R {
 	res := []R{}
@@ -22,7 +26,7 @@ func Filter[S any](arr []S, f func(S) bool) []S {
 	return res
 }
 
-// Reduce
+// Reduce iterates through a slice `arr`, accumulating the result of `f` to some initial value `init`, then returning the final result.
 func Reduce[R, S any](arr []S, init R, f func(s S, r R) R) R {
 	res := init
 	for _, s := range arr {
@@ -34,4 +38,12 @@ func Reduce[R, S any](arr []S, init R, f func(s S, r R) R) R {
 // TrimSplit splits a string on newline characters after trimming leading and trailing whitespace.  This ensures that the resultant slice contains no empty strings.
 func TrimSplit(s string) []string {
 	return strings.Split(strings.TrimSpace(s), "\n")
+}
+
+// Sum is a convenience method to add up a slice of numbers (as defined by an internal type).
+func Sum[V summable](ns []V) V {
+	var ret V
+	return Reduce(ns, ret, func(n, ret V) V {
+		return ret + n
+	})
 }
