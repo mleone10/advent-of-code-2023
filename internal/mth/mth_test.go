@@ -37,3 +37,20 @@ func TestAtoi(t *testing.T) {
 		assert.Equals(t, tc.expected, actual)
 	}
 }
+
+func TestMinMax(t *testing.T) {
+	tcs := []struct {
+		ns       []int
+		min, max int
+	}{
+		{
+			[]int{1, 2, 3, 4, 5},
+			1, 5,
+		},
+	}
+
+	for _, tc := range tcs {
+		assert.Equals(t, tc.min, mth.Min(tc.ns...))
+		assert.Equals(t, tc.max, mth.Max(tc.ns...))
+	}
+}
