@@ -35,3 +35,7 @@ func TestTrimSplit(t *testing.T) {
 	`
 	assert.ArrayEquals(t, []string{"foo", "bar", "fizz", "buzz"}, slice.TrimSplit(input))
 }
+
+func TestSum(t *testing.T) {
+	assert.Equals(t, 15, slice.Sum([]int{1, 2, 3, 4, 5}))
+}

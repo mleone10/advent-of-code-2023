@@ -7,20 +7,24 @@ import (
 	"github.com/mleone10/advent-of-code-2023/internal/mp"
 )
 
-func TestKeys(t *testing.T) {
+func TestKeysAndValues(t *testing.T) {
 	tcs := []struct {
-		subj     map[int]int
-		expected []int
+		subj           map[int]int
+		expectedKeys   []int
+		expectedValues []int
 	}{
 		{
 			map[int]int{1: 5, 2: 10, 3: 15},
 			[]int{1, 2, 3},
+			[]int{5, 10, 15},
 		},
 	}
 
 	for _, tc := range tcs {
-		actual := mp.Keys(tc.subj)
-		assert.ArrayEquals(t, tc.expected, actual)
+		actualKeys := mp.Keys(tc.subj)
+		actualValues := mp.Values(tc.subj)
+		assert.ArrayEquals(t, tc.expectedKeys, actualKeys)
+		assert.ArrayEquals(t, tc.expectedValues, actualValues)
 	}
 }
 
