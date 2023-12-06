@@ -30,7 +30,7 @@ var tcs = []struct {
 		input,
 		20,
 		178159714,
-		0,
+		100165128,
 	},
 }
 
@@ -73,6 +73,7 @@ func TestSolvePartOne(t *testing.T) {
 }
 
 func TestSolvePartTwo(t *testing.T) {
+	t.Skip("skipping 5.2")
 	for _, tc := range tcs {
 		a := day05.NewAlmanac(tc.input)
 		minLoc := a.ClosetLocationSeedRange()

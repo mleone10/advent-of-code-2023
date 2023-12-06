@@ -39,16 +39,25 @@ func NewAlmanac(in string) Almanac {
 	return a
 }
 
-func NewRangeFunc(rs []string) RangeFunc {
-	return func(n int) int {
-		for _, r := range rs {
-			rParts := strings.Fields(r)
-			destStart := mth.Atoi(rParts[0])
-			srcStart := mth.Atoi(rParts[1])
-			length := mth.Atoi(rParts[2])
+type mapRange struct {
+	destStart, srcStart, max int
+}
 
-			if n >= srcStart && n < srcStart+length {
-				return destStart + (n - srcStart)
+func NewRangeFunc(rs []string) RangeFunc {
+	mrs := []mapRange{}
+	for _, r := range rs {
+		rParts := strings.Fields(r)
+		destStart := mth.Atoi(rParts[0])
+		srcStart := mth.Atoi(rParts[1])
+		length := mth.Atoi(rParts[2])
+
+		mrs = append(mrs, mapRange{destStart, srcStart, srcStart + length})
+	}
+
+	return func(n int) int {
+		for _, mr := range mrs {
+			if n >= mr.srcStart && n < mr.max {
+				return mr.destStart + (n - mr.srcStart)
 			}
 		}
 		return n
