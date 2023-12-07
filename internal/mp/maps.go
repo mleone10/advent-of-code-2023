@@ -1,5 +1,9 @@
 package mp
 
+import (
+	"github.com/mleone10/advent-of-code-2023/internal/slice"
+)
+
 // Keys returns a slice of all keys within `m`.
 func Keys[M ~map[K]V, K comparable, V any](m M) []K {
 	ks := []K{}
@@ -27,4 +31,12 @@ func Merge[M ~map[K]V, K comparable, V any](mps ...M) M {
 		}
 	}
 	return ret
+}
+
+// RuneCount produces a map[rune]int containing counts of characters (runes) within a given string `s`.
+func RuneCount(s string) map[rune]int {
+	return slice.Reduce([]rune(s), map[rune]int{}, func(r rune, rs map[rune]int) map[rune]int {
+		rs[r]++
+		return rs
+	})
 }

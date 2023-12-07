@@ -79,3 +79,34 @@ func TestEqualsString(t *testing.T) {
 		}
 	}
 }
+
+func TestMapEquals(t *testing.T) {
+	tcs := []struct {
+		a, b          map[string]int
+		expectedEqual bool
+	}{
+		{
+			map[string]int{"foo": 2, "bar": 4},
+			map[string]int{"foo": 2, "bar": 4},
+			true,
+		},
+		{
+			map[string]int{"foo": 2, "bar": 4},
+			map[string]int{"foo": 2},
+			false,
+		},
+		{
+			map[string]int{"foo": 2, "bar": 4},
+			map[string]int{"foo": 2, "bar": 5},
+			false,
+		},
+	}
+
+	for _, tc := range tcs {
+		u := testing.T{}
+		assert.MapEquals(&u, tc.a, tc.b)
+		if u.Failed() == tc.expectedEqual {
+			t.Errorf("expected [%v] and [%v] equality to be [%v], got [%v]", tc.a, tc.b, tc.expectedEqual, !u.Failed())
+		}
+	}
+}

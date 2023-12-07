@@ -36,3 +36,23 @@ func TestMerge(t *testing.T) {
 	actual := mp.Merge(mapA, mapB, mapC)
 	assert.Equals(t, 8, len(actual))
 }
+
+func TestRuneCount(t *testing.T) {
+	tcs := []struct {
+		input string
+		rcs   map[rune]int
+	}{
+		{
+			"foobar",
+			map[rune]int{'f': 1, 'o': 2, 'b': 1, 'a': 1, 'r': 1},
+		},
+		{
+			"mississippi",
+			map[rune]int{'m': 1, 'i': 4, 's': 4, 'p': 2},
+		},
+	}
+
+	for _, tc := range tcs {
+		assert.MapEquals(t, tc.rcs, mp.RuneCount(tc.input))
+	}
+}
