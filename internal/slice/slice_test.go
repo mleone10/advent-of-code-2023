@@ -39,3 +39,24 @@ func TestTrimSplit(t *testing.T) {
 func TestSum(t *testing.T) {
 	assert.Equals(t, 15, slice.Sum([]int{1, 2, 3, 4, 5}))
 }
+
+func TestContains(t *testing.T) {
+	tcs := []struct {
+		subj     []int
+		v        int
+		expected bool
+	}{
+		{
+			[]int{1, 2, 3, 4, 5},
+			2, true,
+		},
+		{
+			[]int{1, 2, 3, 4, 5},
+			6, false,
+		},
+	}
+
+	for _, tc := range tcs {
+		assert.Equals(t, tc.expected, slice.Contains(tc.subj, tc.v))
+	}
+}

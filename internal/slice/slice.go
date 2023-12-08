@@ -47,3 +47,13 @@ func Sum[V summable](ns []V) V {
 		return ret + n
 	})
 }
+
+// Contains returns true if slice `arr` contains a value equal to `v`.
+func Contains[S comparable](arr []S, v S) bool {
+	for _, a := range arr {
+		if a == v {
+			return true
+		}
+	}
+	return false
+}
