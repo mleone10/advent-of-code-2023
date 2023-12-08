@@ -54,3 +54,27 @@ func TestMinMax(t *testing.T) {
 		assert.Equals(t, tc.max, mth.Max(tc.ns...))
 	}
 }
+
+func TestLcm(t *testing.T) {
+	tcs := []struct {
+		ns       []int
+		expected int
+	}{
+		{
+			[]int{10}, 10,
+		},
+		{
+			[]int{10, 15}, 30,
+		},
+		{
+			[]int{10, 15, 20}, 60,
+		},
+		{
+			[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, 2520,
+		},
+	}
+
+	for _, tc := range tcs {
+		assert.Equals(t, tc.expected, mth.Lcm(tc.ns...))
+	}
+}

@@ -37,3 +37,30 @@ func Max(ns ...int) int {
 	}
 	return max
 }
+
+// Gcd computes the greatest common divisor of two integers.
+// Credit: https://siongui.github.io/2017/06/03/go-find-lcm-by-gcd/
+func Gcd(a, b int) int {
+	for b != 0 {
+		tmp := b
+		b = a % b
+		a = tmp
+	}
+	return a
+}
+
+// Lcm computs the least common multiple of at least two integers.
+// Credit: https://siongui.github.io/2017/06/03/go-find-lcm-by-gcd/
+func Lcm(ns ...int) int {
+	if len(ns) == 1 {
+		return ns[0]
+	}
+
+	res := ns[0] * ns[1] / Gcd(ns[0], ns[1])
+
+	for i := 0; i < len(ns[2:]); i++ {
+		res = Lcm(res, ns[2+i])
+	}
+
+	return res
+}
