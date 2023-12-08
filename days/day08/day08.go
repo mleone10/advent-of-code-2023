@@ -1,7 +1,6 @@
 package day08
 
 import (
-	"log"
 	"strings"
 	"unicode"
 
@@ -67,7 +66,6 @@ func (m *Map) init() {
 		nParts := strings.FieldsFunc(l, func(r rune) bool {
 			return !(unicode.IsLetter(r) || unicode.IsNumber(r))
 		})
-		log.Println(nParts)
 		ns[nParts[0]] = map[rune]string{'L': nParts[1], 'R': nParts[2]}
 		return ns
 	})
