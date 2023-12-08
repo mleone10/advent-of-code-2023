@@ -1,6 +1,7 @@
 package day08
 
 import (
+	"log"
 	"strings"
 	"unicode"
 
@@ -64,8 +65,9 @@ func (m *Map) init() {
 
 	m.nodes = slice.Reduce(slice.TrimSplit(iParts[1]), map[string]map[rune]string{}, func(l string, ns map[string]map[rune]string) map[string]map[rune]string {
 		nParts := strings.FieldsFunc(l, func(r rune) bool {
-			return unicode.IsSpace(r) || unicode.IsSymbol(r) || unicode.IsPunct(r)
+			return !(unicode.IsLetter(r) || unicode.IsNumber(r))
 		})
+		log.Println(nParts)
 		ns[nParts[0]] = map[rune]string{'L': nParts[1], 'R': nParts[2]}
 		return ns
 	})
