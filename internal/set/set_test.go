@@ -32,3 +32,12 @@ func TestSlice(t *testing.T) {
 
 	assert.ArrayEquals(t, []int{1, 2, 3}, s.Slice())
 }
+
+func TestFrom(t *testing.T) {
+	subj := []int{1, 2, 3, 4, 5, 6, 1, 1, 4, 10}
+
+	actual := set.From(subj...)
+
+	assert.Equals(t, 7, len(actual))
+	assert.ArrayEquals(t, []int{1, 2, 3, 4, 5, 6, 10}, actual.Slice())
+}

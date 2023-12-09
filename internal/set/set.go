@@ -19,6 +19,14 @@ func (s Set[T]) Size() int {
 	return len(s)
 }
 
+// Slice returns a slice of unique values in the Set.
 func (s Set[T]) Slice() []T {
 	return mp.Keys(s)
+}
+
+// From creates a set using the values of the input arguments `vals`.
+func From[T setVal](vals ...T) Set[T] {
+	s := Set[T]{}
+	s.Add(vals...)
+	return s
 }
