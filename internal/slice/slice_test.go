@@ -60,3 +60,11 @@ func TestContains(t *testing.T) {
 		assert.Equals(t, tc.expected, slice.Contains(tc.subj, tc.v))
 	}
 }
+
+func TestReverse(t *testing.T) {
+	subj := []int{1, 2, 3, 4, 5}
+
+	actual := slice.Reverse(subj)
+
+	assert.ArrayEquals(t, []int{5, 4, 3, 2, 1}, actual)
+}

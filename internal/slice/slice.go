@@ -57,3 +57,12 @@ func Contains[S comparable](arr []S, v S) bool {
 	}
 	return false
 }
+
+// Reverse returns a mirrored copy of `arr`.
+func Reverse[S comparable](arr []S) []S {
+	ret := []S{}
+	for i := len(arr) - 1; i >= 0; i-- {
+		ret = append(ret, arr[i])
+	}
+	return ret
+}
