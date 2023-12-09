@@ -10,15 +10,13 @@ import (
 func Next(l string) int {
 	seq := parseReadings(l)
 
-	_, diff := diff(seq)
-	return seq[len(seq)-1] + diff
+	return seq[len(seq)-1] + diff(seq)
 }
 
 func Prev(l string) int {
 	seq := parseReadings(l)
 
-	diff, _ := diff(seq)
-	return seq[0] - diff
+	return seq[0] + diff(slice.Reverse(seq))
 }
 
 func parseReadings(r string) []int {
@@ -27,8 +25,8 @@ func parseReadings(r string) []int {
 	})
 }
 
-// Diffs recursively determines the next difference to the left and right of a given sequence `seq`.
-func diff(seq []int) (left, right int) {
+// Diffs recursively determines the next difference of a given sequence `seq`.
+func diff(seq []int) int {
 	// Compute the differences between elements of `seq`.
 	diffs := []int{}
 	for i := 0; i < len(seq)-1; i++ {
@@ -37,10 +35,9 @@ func diff(seq []int) (left, right int) {
 
 	// If all differences are zeroes, we've reached the bottom of the recursion.
 	if len(slice.Filter(diffs, func(v int) bool { return v != 0 })) == 0 {
-		return diffs[0], diffs[0]
+		return diffs[0]
 	}
 
-	// Otherwise, recurse to find the differences between the newly-computed sequence `diffs`.  Then return back to the caller with the computed differences for the original `seq`.
-	left, right = diff(diffs)
-	return diffs[0] - left, diffs[len(diffs)-1] + right
+	// Otherwise, recurse to find the differences between the newly-computed sequence `diffs`.  Then return back to the caller with the computed next difference for the original `seq`.
+	return diffs[len(diffs)-1] + diff(diffs)
 }
