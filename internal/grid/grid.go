@@ -23,6 +23,10 @@ func (sg *Grid[T]) Get(x, y int) (T, bool) {
 	return *new(T), false
 }
 
+func (sg *Grid[T]) GetPoint(p Point) (T, bool) {
+	return sg.Get(p.X, p.Y)
+}
+
 // Map applies the given function `f` to all elements of the grid, returning a new grid to the caller.
 func Map[T, V comparable](g Grid[T], f func(g Grid[T], x, y int, v T) V) Grid[V] {
 	ng := Grid[V]{}
