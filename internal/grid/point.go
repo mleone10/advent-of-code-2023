@@ -5,6 +5,23 @@ type Point struct {
 	X, Y int
 }
 
+var (
+	DeltaUp    = Point{X: 0, Y: -1}
+	DeltaDown  = Point{X: 0, Y: 1}
+	DeltaLeft  = Point{X: -1, Y: 0}
+	DeltaRight = Point{X: 1, Y: 0}
+
+	CardinalDeltas = []Point{DeltaUp, DeltaDown, DeltaLeft, DeltaRight}
+)
+
+func (p Point) Add(q Point) Point {
+	return Point{X: p.X + q.X, Y: p.Y + q.Y}
+}
+
+func (p Point) Equals(q Point) bool {
+	return p.X == q.X && p.Y == q.Y
+}
+
 // The Neighbors of point `p` are all those points above, below, left, right, or diagonal from `p` with positive coordinates of their own.
 func Neighbors(p Point) []Point {
 	ps := []Point{}
@@ -23,23 +40,12 @@ func Neighbors(p Point) []Point {
 }
 
 func CardinalNeighbors(p Point) []Point {
-	return []Point{
-		p.Up(), p.Down(), p.Left(), p.Right(),
+	ns := []Point{}
+	for _, d := range CardinalDeltas {
+		n := p.Add(d)
+		if n.X >= 0 && n.Y >= 0 {
+			ns = append(ns, n)
+		}
 	}
-}
-
-func (p Point) Up() Point {
-	return Point{X: p.X, Y: p.Y - 1}
-}
-
-func (p Point) Down() Point {
-	return Point{X: p.X, Y: p.Y + 1}
-}
-
-func (p Point) Left() Point {
-	return Point{X: p.X - 1, Y: p.Y}
-}
-
-func (p Point) Right() Point {
-	return Point{X: p.X + 1, Y: p.Y}
+	return ns
 }

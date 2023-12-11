@@ -32,6 +32,11 @@ var tcs = []struct {
 		8,
 		0,
 	},
+	{
+		input,
+		6856,
+		0,
+	},
 }
 
 func TestSolvePartOne(t *testing.T) {
