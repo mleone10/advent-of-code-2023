@@ -69,7 +69,7 @@ func (p *PipeField) traverseLoop(cur grid.Point) {
 
 func loopContains(ps []grid.Point, q grid.Point) bool {
 	for _, p := range ps {
-		if p.X == q.X && p.Y == q.Y {
+		if p.Equals(q) {
 			return true
 		}
 	}

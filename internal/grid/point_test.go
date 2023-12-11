@@ -27,3 +27,31 @@ func TestNeighbors(t *testing.T) {
 		assert.Equals(t, tc.expectedNeighbors, actual)
 	}
 }
+
+func TestAdd(t *testing.T) {
+	subj := grid.Point{X: 5, Y: 5}
+	actual := subj.Add(grid.Point{X: 2, Y: 4})
+
+	assert.Equals(t, 7, actual.X)
+	assert.Equals(t, 9, actual.Y)
+}
+
+func TestEquals(t *testing.T) {
+	tcs := []struct {
+		a, b     grid.Point
+		expected bool
+	}{
+		{
+			grid.Point{1, 2}, grid.Point{3, 4},
+			false,
+		},
+		{
+			grid.Point{4, 5}, grid.Point{4, 5},
+			true,
+		},
+	}
+
+	for _, tc := range tcs {
+		assert.Equals(t, tc.expected, tc.a.Equals(tc.b))
+	}
+}

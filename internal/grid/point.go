@@ -5,19 +5,20 @@ type Point struct {
 	X, Y int
 }
 
+// Deltas represent the differences between a given point and its neighbors.
 var (
 	DeltaUp    = Point{X: 0, Y: -1}
 	DeltaDown  = Point{X: 0, Y: 1}
 	DeltaLeft  = Point{X: -1, Y: 0}
 	DeltaRight = Point{X: 1, Y: 0}
-
-	CardinalDeltas = []Point{DeltaUp, DeltaDown, DeltaLeft, DeltaRight}
 )
 
+// Add returns a new Point whose X and Y coordinates equal the vector sum of `p` and `q`, which are not modified.
 func (p Point) Add(q Point) Point {
 	return Point{X: p.X + q.X, Y: p.Y + q.Y}
 }
 
+// Equals returns true if Points `p` and `q` have equal X and Y coordinates.
 func (p Point) Equals(q Point) bool {
 	return p.X == q.X && p.Y == q.Y
 }
@@ -37,15 +38,4 @@ func Neighbors(p Point) []Point {
 		}
 	}
 	return ps
-}
-
-func CardinalNeighbors(p Point) []Point {
-	ns := []Point{}
-	for _, d := range CardinalDeltas {
-		n := p.Add(d)
-		if n.X >= 0 && n.Y >= 0 {
-			ns = append(ns, n)
-		}
-	}
-	return ns
 }
