@@ -34,6 +34,13 @@ func NewPipeField(in string) PipeField {
 		loop:  []grid.Point{},
 	}
 
+	p.loadGrid(in)
+	p.traverseLoop(p.start)
+
+	return p
+}
+
+func (p *PipeField) loadGrid(in string) {
 	for y, r := range slice.TrimSplit(in) {
 		for x, c := range r {
 			p.field.Set(x, y, tile{tType: c})
@@ -42,10 +49,6 @@ func NewPipeField(in string) PipeField {
 			}
 		}
 	}
-
-	p.traverseLoop(p.start)
-
-	return p
 }
 
 func (p *PipeField) traverseLoop(cur grid.Point) {
@@ -58,19 +61,7 @@ func (p *PipeField) traverseLoop(cur grid.Point) {
 	p.loop = append(p.loop, cur)
 
 	// Then, recurse to the valid neighbors of the current point.
-	ns := []grid.Point{}
-	cTile, _ := p.field.GetPoint(cur)
-	for _, n := range slice.Map(neighborDeltas[cTile.tType], func(delta grid.Point) grid.Point {
-		return cur.Add(delta)
-	}) {
-		t, _ := p.field.GetPoint(n)
-		for _, d := range neighborDeltas[t.tType] {
-			if n.Add(d).Equals(cur) {
-				ns = append(ns, n)
-			}
-		}
-	}
-
+	ns := validNeighbors(*p, cur)
 	for _, n := range ns {
 		p.traverseLoop(n)
 	}
@@ -83,6 +74,22 @@ func loopContains(ps []grid.Point, q grid.Point) bool {
 		}
 	}
 	return false
+}
+
+func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
+	ns := []grid.Point{}
+	cTile, _ := p.field.GetPoint(cur)
+	for _, n := range slice.Map(neighborDeltas[cTile.tType], func(delta grid.Point) grid.Point {
+		return cur.Add(delta)
+	}) {
+		t, _ := p.field.GetPoint(n)
+		for _, d := range neighborDeltas[t.tType] {
+			if n.Add(d).Equals(cur) {
+				ns = append(ns, n)
+			}
+		}
+	}
+	return ns
 }
 
 func (p PipeField) StepsFarthestFromStart() int {
