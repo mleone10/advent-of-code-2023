@@ -5,6 +5,10 @@ type Point struct {
 	X, Y int
 }
 
+type Line struct {
+	A, B Point
+}
+
 // Deltas represent the differences between a given point and its neighbors.
 var (
 	DeltaUp    = Point{X: 0, Y: -1}

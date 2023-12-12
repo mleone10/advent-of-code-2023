@@ -6,10 +6,12 @@ import (
 )
 
 type PipeField struct {
-	input string
-	start grid.Point
-	field grid.Grid[tile]
-	loop  []grid.Point
+	input        string
+	start        grid.Point
+	field        grid.Grid[tile]
+	loop         []grid.Point
+	loopSegments []grid.Line
+	prevCorner   grid.Point
 }
 
 type tile struct {
@@ -29,9 +31,10 @@ var neighborDeltas = map[rune][]grid.Point{
 
 func NewPipeField(in string) PipeField {
 	p := PipeField{
-		input: in,
-		field: grid.Grid[tile]{},
-		loop:  []grid.Point{},
+		input:        in,
+		field:        grid.Grid[tile]{},
+		loop:         []grid.Point{},
+		loopSegments: []grid.Line{},
 	}
 
 	p.loadGrid(in)
@@ -54,17 +57,26 @@ func (p *PipeField) loadGrid(in string) {
 func (p *PipeField) traverseLoop(cur grid.Point) {
 	// If the loop already contains this point, do nothing.
 	if loopContains(p.loop, cur) {
+
 		return
 	}
 
-	// Otherwise, store the new point in the loop.
+	// Otherwise, store the new point in the loop, record a new loop segment, and traverse to the next neighbor.
 	p.loop = append(p.loop, cur)
-
-	// Then, recurse to the valid neighbors of the current point.
 	ns := validNeighbors(*p, cur)
+
 	if isStart(*p, cur) {
+		// We only want to traverse the loop in one direction, so we only recurse in one direction from the start point.
+		p.prevCorner = cur
 		p.traverseLoop(ns[0])
+		p.loopSegments = append(p.loopSegments, grid.Line{A: p.prevCorner, B: cur})
 	} else {
+		// If the current non-start point is a corner, record the end of a line segment
+		if isCorner(*p, cur) {
+			p.loopSegments = append(p.loopSegments, grid.Line{A: p.prevCorner, B: cur})
+			p.prevCorner = cur
+		}
+		// Then recurse into all neighbors.  We only expect one to actually proceed with the loop.
 		for _, n := range ns {
 			p.traverseLoop(n)
 		}
@@ -99,6 +111,11 @@ func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
 func isStart(p PipeField, cur grid.Point) bool {
 	t, _ := p.field.GetPoint(cur)
 	return t.tType == 'S'
+}
+
+func isCorner(p PipeField, cur grid.Point) bool {
+	t, _ := p.field.GetPoint(cur)
+	return slice.Contains([]rune{'F', 'J', 'L', '7'}, t.tType)
 }
 
 func (p PipeField) StepsFarthestFromStart() int {
