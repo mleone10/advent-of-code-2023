@@ -1,5 +1,7 @@
 package grid
 
+import "github.com/mleone10/advent-of-code-2023/internal/mth"
+
 // A Point is a coordinate pair in a 2D plane.
 type Point struct {
 	X, Y int
@@ -42,4 +44,8 @@ func Neighbors(p Point) []Point {
 		}
 	}
 	return ps
+}
+
+func TaxicabLength(l Line) int {
+	return mth.Abs(l.A.X-l.B.X) + mth.Abs(l.A.Y-l.B.Y)
 }
