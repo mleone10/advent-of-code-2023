@@ -55,3 +55,8 @@ func TestEquals(t *testing.T) {
 		assert.Equals(t, tc.expected, tc.a.Equals(tc.b))
 	}
 }
+
+func TestTaxicabLength(t *testing.T) {
+	assert.Equals(t, 6, geo.TaxicabLength(geo.Line{A: geo.Point{1, 1}, B: geo.Point{5, 3}}))
+	assert.Equals(t, 0, geo.TaxicabLength(geo.Line{A: geo.Point{1, 1}, B: geo.Point{1, 1}}))
+}

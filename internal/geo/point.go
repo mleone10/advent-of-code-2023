@@ -46,6 +46,7 @@ func Neighbors(p Point) []Point {
 	return ps
 }
 
+// TaxicabLength returns the distance between two points of a line as if one were traveling along a 2D grid between them.
 func TaxicabLength(l Line) int {
 	return mth.Abs(l.A.X-l.B.X) + mth.Abs(l.A.Y-l.B.Y)
 }
