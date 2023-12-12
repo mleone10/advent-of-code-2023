@@ -29,6 +29,19 @@ var neighborDeltas = map[rune][]grid.Point{
 	'S': {grid.DeltaUp, grid.DeltaDown, grid.DeltaLeft, grid.DeltaRight},
 }
 
+func (p PipeField) StepsFarthestFromStart() int {
+	return len(p.loop) / 2
+}
+
+func (p PipeField) TilesEnclosedByLoop() int {
+	return grid.Reduce(p.field, 0, func(g grid.Grid[tile], x, y int, v tile, ret int) int {
+		if isWithinLoop(p, grid.Point{X: x, Y: y}) {
+			return ret + 1
+		}
+		return ret
+	})
+}
+
 func NewPipeField(in string) PipeField {
 	p := PipeField{
 		input:        in,
@@ -118,6 +131,6 @@ func isCorner(p PipeField, cur grid.Point) bool {
 	return slice.Contains([]rune{'F', 'J', 'L', '7'}, t.tType)
 }
 
-func (p PipeField) StepsFarthestFromStart() int {
-	return len(p.loop) / 2
+func isWithinLoop(p PipeField, t grid.Point) bool {
+	return true
 }
