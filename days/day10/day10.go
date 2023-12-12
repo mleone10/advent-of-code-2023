@@ -1,28 +1,28 @@
 package day10
 
 import (
-	"github.com/mleone10/advent-of-code-2023/internal/grid"
+	"github.com/mleone10/advent-of-code-2023/internal/geo"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
 
 type PipeField struct {
 	input string
-	start grid.Point
-	field grid.Grid[rune]
-	loop  []grid.Point
+	start geo.Point
+	field geo.Grid[rune]
+	loop  []geo.Point
 
-	poly grid.Polygon
+	poly geo.Polygon
 }
 
-var neighborDeltas = map[rune][]grid.Point{
-	'-': {grid.DeltaLeft, grid.DeltaRight},
-	'|': {grid.DeltaUp, grid.DeltaDown},
-	'L': {grid.DeltaUp, grid.DeltaRight},
-	'J': {grid.DeltaUp, grid.DeltaLeft},
-	'7': {grid.DeltaDown, grid.DeltaLeft},
-	'F': {grid.DeltaDown, grid.DeltaRight},
+var neighborDeltas = map[rune][]geo.Point{
+	'-': {geo.DeltaLeft, geo.DeltaRight},
+	'|': {geo.DeltaUp, geo.DeltaDown},
+	'L': {geo.DeltaUp, geo.DeltaRight},
+	'J': {geo.DeltaUp, geo.DeltaLeft},
+	'7': {geo.DeltaDown, geo.DeltaLeft},
+	'F': {geo.DeltaDown, geo.DeltaRight},
 	'.': {},
-	'S': {grid.DeltaUp, grid.DeltaDown, grid.DeltaLeft, grid.DeltaRight},
+	'S': {geo.DeltaUp, geo.DeltaDown, geo.DeltaLeft, geo.DeltaRight},
 }
 
 func (p PipeField) StepsFarthestFromStart() int {
@@ -30,8 +30,8 @@ func (p PipeField) StepsFarthestFromStart() int {
 }
 
 func (p PipeField) TilesEnclosedByLoop() int {
-	return grid.Reduce(p.field, 0, func(g grid.Grid[rune], x, y int, v rune, ret int) int {
-		if p.poly.Contains(grid.Point{X: x, Y: y}) {
+	return geo.Reduce(p.field, 0, func(g geo.Grid[rune], x, y int, v rune, ret int) int {
+		if p.poly.Contains(geo.Point{X: x, Y: y}) {
 			// if isWithinLoop(p, grid.Point{X: x, Y: y}) {
 			return ret + 1
 		}
@@ -42,9 +42,9 @@ func (p PipeField) TilesEnclosedByLoop() int {
 func NewPipeField(in string) PipeField {
 	p := PipeField{
 		input: in,
-		field: grid.Grid[rune]{},
-		loop:  []grid.Point{},
-		poly:  grid.Polygon{},
+		field: geo.Grid[rune]{},
+		loop:  []geo.Point{},
+		poly:  geo.Polygon{},
 	}
 
 	p.loadGrid(in)
@@ -58,13 +58,13 @@ func (p *PipeField) loadGrid(in string) {
 		for x, c := range r {
 			p.field.Set(x, y, c)
 			if c == 'S' {
-				p.start = grid.Point{X: x, Y: y}
+				p.start = geo.Point{X: x, Y: y}
 			}
 		}
 	}
 }
 
-func (p *PipeField) traverseLoop(cur grid.Point) {
+func (p *PipeField) traverseLoop(cur geo.Point) {
 	// If the loop already contains this point, do nothing.
 	if loopContains(p.loop, cur) {
 		return
@@ -91,7 +91,7 @@ func (p *PipeField) traverseLoop(cur grid.Point) {
 	}
 }
 
-func loopContains(ps []grid.Point, pt grid.Point) bool {
+func loopContains(ps []geo.Point, pt geo.Point) bool {
 	for _, p := range ps {
 		if p.Equals(pt) {
 			return true
@@ -100,10 +100,10 @@ func loopContains(ps []grid.Point, pt grid.Point) bool {
 	return false
 }
 
-func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
-	ns := []grid.Point{}
+func validNeighbors(p PipeField, cur geo.Point) []geo.Point {
+	ns := []geo.Point{}
 	c, _ := p.field.GetPoint(cur)
-	for _, n := range slice.Map(neighborDeltas[c], func(delta grid.Point) grid.Point {
+	for _, n := range slice.Map(neighborDeltas[c], func(delta geo.Point) geo.Point {
 		return cur.Add(delta)
 	}) {
 		t, _ := p.field.GetPoint(n)

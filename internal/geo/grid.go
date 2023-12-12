@@ -1,4 +1,4 @@
-package grid
+package geo
 
 type Grid[T comparable] struct {
 	points map[int]map[int]T

@@ -1,4 +1,4 @@
-package grid
+package geo
 
 import "github.com/mleone10/advent-of-code-2023/internal/mth"
 
