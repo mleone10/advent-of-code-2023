@@ -62,8 +62,12 @@ func (p *PipeField) traverseLoop(cur grid.Point) {
 
 	// Then, recurse to the valid neighbors of the current point.
 	ns := validNeighbors(*p, cur)
-	for _, n := range ns {
-		p.traverseLoop(n)
+	if isStart(*p, cur) {
+		p.traverseLoop(ns[0])
+	} else {
+		for _, n := range ns {
+			p.traverseLoop(n)
+		}
 	}
 }
 
@@ -90,6 +94,11 @@ func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
 		}
 	}
 	return ns
+}
+
+func isStart(p PipeField, cur grid.Point) bool {
+	t, _ := p.field.GetPoint(cur)
+	return t.tType == 'S'
 }
 
 func (p PipeField) StepsFarthestFromStart() int {
