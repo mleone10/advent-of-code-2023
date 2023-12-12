@@ -1,22 +1,23 @@
 package geo
 
 import (
-	"log"
-
 	"github.com/mleone10/advent-of-code-2023/internal/mth"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
 
+// A Polygon represents a 2D collection of sequential points which define a bounded space.  Points have width and depth.
 type Polygon struct {
 	points  []Point
 	vectors []Line
 }
 
+// Add adds a new Point to the Polygon's point set.  The call also clears the Vectors() memo.
 func (p *Polygon) Add(pt Point) {
 	p.points = append(p.points, pt)
 	p.vectors = nil
 }
 
+// Vectors returns a slice of Lines which connect the individual, sequential Points of the Polygon.  Vectors are memoized across calls to Vectors().
 func (p *Polygon) Vectors() []Line {
 	if len(p.points) < 3 {
 		return []Line{}
@@ -25,7 +26,6 @@ func (p *Polygon) Vectors() []Line {
 		return p.vectors
 	}
 
-	log.Println("vectors")
 	ls := []Line{}
 	for i := 0; i < len(p.points)-1; i++ {
 		ls = append(ls, Line{A: p.points[i], B: p.points[i+1]})
@@ -37,16 +37,14 @@ func (p *Polygon) Vectors() []Line {
 	return ls
 }
 
+// Perimeter returns the number of points along the Polygon's outer edge.
 func (p Polygon) Perimeter() int {
 	return slice.Reduce(p.Vectors(), 0, func(l Line, ret int) int {
 		return ret + TaxicabLength(l)
 	})
 }
 
-func (p Polygon) Area() int {
-	return 0
-}
-
+// Contains determines if a Point is strictly within a Polygon.  Points located on the edge of the Polygon do not count as being within it.
 func (p *Polygon) Contains(pt Point) bool {
 	is := 0
 	for _, seg := range p.Vectors() {
