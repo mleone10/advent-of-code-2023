@@ -78,3 +78,9 @@ func TestLcm(t *testing.T) {
 		assert.Equals(t, tc.expected, mth.Lcm(tc.ns...))
 	}
 }
+
+func TestAbs(t *testing.T) {
+	assert.Equals(t, 2, mth.Abs(-2))
+	assert.Equals(t, 2, mth.Abs(2))
+	assert.Equals(t, 0, mth.Abs(0))
+}

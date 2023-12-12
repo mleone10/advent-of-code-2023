@@ -2,6 +2,7 @@ package day10
 
 import (
 	"github.com/mleone10/advent-of-code-2023/internal/grid"
+	"github.com/mleone10/advent-of-code-2023/internal/mth"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
 
@@ -154,7 +155,7 @@ func pointOnLine(l grid.Line, p grid.Point) bool {
 		return false
 	}
 
-	if abs(dx1) >= abs(dy1) {
+	if mth.Abs(dx1) >= mth.Abs(dy1) {
 		if dx1 > 0 {
 			return l.A.X <= p.X && p.X <= l.B.X
 		}
@@ -165,11 +166,4 @@ func pointOnLine(l grid.Line, p grid.Point) bool {
 		}
 		return l.B.Y <= p.Y && p.Y <= l.A.Y
 	}
-}
-
-func abs(a int) int {
-	if a < 0 {
-		return -a
-	}
-	return a
 }
