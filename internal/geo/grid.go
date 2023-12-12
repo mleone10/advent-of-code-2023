@@ -1,4 +1,4 @@
-package grid
+package geo
 
 type Grid[T comparable] struct {
 	points map[int]map[int]T
@@ -21,6 +21,10 @@ func (sg *Grid[T]) Get(x, y int) (T, bool) {
 		return v, true
 	}
 	return *new(T), false
+}
+
+func (sg *Grid[T]) GetPoint(p Point) (T, bool) {
+	return sg.Get(p.X, p.Y)
 }
 
 // Map applies the given function `f` to all elements of the grid, returning a new grid to the caller.

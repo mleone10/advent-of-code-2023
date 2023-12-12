@@ -3,7 +3,7 @@ package day18
 import (
 	"strings"
 
-	"github.com/mleone10/advent-of-code-2023/internal/grid"
+	"github.com/mleone10/advent-of-code-2023/internal/geo"
 )
 
 type Light struct {
@@ -12,12 +12,12 @@ type Light struct {
 }
 
 type LightGrid struct {
-	grid          grid.Grid[*Light]
+	grid          geo.Grid[*Light]
 	width, height int
 }
 
 func NewLightGrid(input string) *LightGrid {
-	g := grid.Grid[*Light]{}
+	g := geo.Grid[*Light]{}
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 	for y, l := range lines {
 		for x, c := range l {
@@ -33,7 +33,7 @@ func NewLightGrid(input string) *LightGrid {
 }
 
 func (lg *LightGrid) NumOn() int {
-	return grid.Reduce(lg.grid, 0, func(g grid.Grid[*Light], x, y int, v *Light, res int) int {
+	return geo.Reduce(lg.grid, 0, func(g geo.Grid[*Light], x, y int, v *Light, res int) int {
 		if v.on {
 			return res + 1
 		}
@@ -42,12 +42,12 @@ func (lg *LightGrid) NumOn() int {
 }
 
 func (lg *LightGrid) Step() {
-	lg.grid = grid.Map(lg.grid, lightIsOn)
+	lg.grid = geo.Map(lg.grid, lightIsOn)
 }
 
 func (lg *LightGrid) StepN(n int) {
 	for i := 0; i < n; i++ {
-		lg.grid = grid.Map(lg.grid, lightIsOn)
+		lg.grid = geo.Map(lg.grid, lightIsOn)
 	}
 }
 
@@ -67,7 +67,7 @@ func (lg *LightGrid) CornersStuckOn() {
 	bottomRight.stuck = true
 }
 
-func lightIsOn(g grid.Grid[*Light], x, y int, v *Light) *Light {
+func lightIsOn(g geo.Grid[*Light], x, y int, v *Light) *Light {
 	if v, ok := g.Get(x, y); ok && v.stuck {
 		return &Light{v.on, v.stuck}
 	}

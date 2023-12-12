@@ -16,6 +16,14 @@ func Atoi(s string) int {
 	return n
 }
 
+// Abs returns the absolute value of `n`.
+func Abs(n int) int {
+	if n < 0 {
+		return -n
+	}
+	return n
+}
+
 // Min returns the smallest integer within `ns`.
 func Min(ns ...int) int {
 	min := math.MaxInt

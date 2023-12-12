@@ -4,13 +4,13 @@ import (
 	"strconv"
 	"unicode"
 
-	"github.com/mleone10/advent-of-code-2023/internal/grid"
+	"github.com/mleone10/advent-of-code-2023/internal/geo"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
 
 type partNumber struct {
 	val  int
-	locs []grid.Point
+	locs []geo.Point
 }
 
 func PartNumberSum(ls []string) int {
@@ -20,7 +20,7 @@ func PartNumberSum(ls []string) int {
 	validParts := slice.Filter(ps, func(pn partNumber) bool {
 		adj := false
 		for _, l := range pn.locs {
-			for _, p := range grid.Neighbors(l) {
+			for _, p := range geo.Neighbors(l) {
 				if _, ok := ss.Get(p.X, p.Y); ok {
 					adj = true
 					break
@@ -42,7 +42,7 @@ func GearRatioSum(ls []string) int {
 	ratios := []int{}
 	for _, g := range gs {
 		adjParts := []partNumber{}
-		ns := grid.Neighbors(g)
+		ns := geo.Neighbors(g)
 		for _, p := range ps {
 			adj := false
 			for _, l := range p.locs {
@@ -77,11 +77,11 @@ func parsePartNumbers(ls []string) []partNumber {
 			if unicode.IsDigit(r) && numString == "" {
 				// Found start of new part number
 				numString += string(r)
-				p = partNumber{locs: []grid.Point{{X: x, Y: y}}}
+				p = partNumber{locs: []geo.Point{{X: x, Y: y}}}
 			} else if unicode.IsDigit(r) {
 				// Found new digit in existing part number
 				numString += string(r)
-				p.locs = append(p.locs, grid.Point{X: x, Y: y})
+				p.locs = append(p.locs, geo.Point{X: x, Y: y})
 			}
 			if numString != "" && (!unicode.IsDigit(r) || x == len(l)-1) {
 				// Reached end of number or end of line
@@ -96,8 +96,8 @@ func parsePartNumbers(ls []string) []partNumber {
 	return partNumbers
 }
 
-func parseSymbols(ls []string) grid.Grid[bool] {
-	g := grid.Grid[bool]{}
+func parseSymbols(ls []string) geo.Grid[bool] {
+	g := geo.Grid[bool]{}
 
 	for y, l := range ls {
 		for x, r := range l {
@@ -110,13 +110,13 @@ func parseSymbols(ls []string) grid.Grid[bool] {
 	return g
 }
 
-func parseGears(ls []string) []grid.Point {
-	gs := []grid.Point{}
+func parseGears(ls []string) []geo.Point {
+	gs := []geo.Point{}
 
 	for y, l := range ls {
 		for x, r := range l {
 			if r == '*' {
-				gs = append(gs, grid.Point{X: x, Y: y})
+				gs = append(gs, geo.Point{X: x, Y: y})
 			}
 		}
 	}
