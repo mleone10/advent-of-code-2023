@@ -1,8 +1,6 @@
 package day10
 
 import (
-	"log"
-
 	"github.com/mleone10/advent-of-code-2023/internal/grid"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
@@ -10,14 +8,10 @@ import (
 type PipeField struct {
 	input        string
 	start        grid.Point
-	field        grid.Grid[tile]
+	field        grid.Grid[rune]
 	loop         []grid.Point
 	loopSegments []grid.Line
 	prevCorner   grid.Point
-}
-
-type tile struct {
-	tType rune
 }
 
 var neighborDeltas = map[rune][]grid.Point{
@@ -36,9 +30,8 @@ func (p PipeField) StepsFarthestFromStart() int {
 }
 
 func (p PipeField) TilesEnclosedByLoop() int {
-	return grid.Reduce(p.field, 0, func(g grid.Grid[tile], x, y int, v tile, ret int) int {
+	return grid.Reduce(p.field, 0, func(g grid.Grid[rune], x, y int, v rune, ret int) int {
 		if isWithinLoop(p, grid.Point{X: x, Y: y}) {
-			log.Println(x, y)
 			return ret + 1
 		}
 		return ret
@@ -48,7 +41,7 @@ func (p PipeField) TilesEnclosedByLoop() int {
 func NewPipeField(in string) PipeField {
 	p := PipeField{
 		input:        in,
-		field:        grid.Grid[tile]{},
+		field:        grid.Grid[rune]{},
 		loop:         []grid.Point{},
 		loopSegments: []grid.Line{},
 	}
@@ -62,7 +55,7 @@ func NewPipeField(in string) PipeField {
 func (p *PipeField) loadGrid(in string) {
 	for y, r := range slice.TrimSplit(in) {
 		for x, c := range r {
-			p.field.Set(x, y, tile{tType: c})
+			p.field.Set(x, y, c)
 			if c == 'S' {
 				p.start = grid.Point{X: x, Y: y}
 			}
@@ -109,12 +102,12 @@ func loopContains(ps []grid.Point, q grid.Point) bool {
 
 func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
 	ns := []grid.Point{}
-	cTile, _ := p.field.GetPoint(cur)
-	for _, n := range slice.Map(neighborDeltas[cTile.tType], func(delta grid.Point) grid.Point {
+	c, _ := p.field.GetPoint(cur)
+	for _, n := range slice.Map(neighborDeltas[c], func(delta grid.Point) grid.Point {
 		return cur.Add(delta)
 	}) {
 		t, _ := p.field.GetPoint(n)
-		for _, d := range neighborDeltas[t.tType] {
+		for _, d := range neighborDeltas[t] {
 			if n.Add(d).Equals(cur) {
 				ns = append(ns, n)
 			}
@@ -125,12 +118,12 @@ func validNeighbors(p PipeField, cur grid.Point) []grid.Point {
 
 func isStart(p PipeField, cur grid.Point) bool {
 	t, _ := p.field.GetPoint(cur)
-	return t.tType == 'S'
+	return t == 'S'
 }
 
 func isCorner(p PipeField, cur grid.Point) bool {
 	t, _ := p.field.GetPoint(cur)
-	return slice.Contains([]rune{'F', 'J', 'L', '7'}, t.tType)
+	return slice.Contains([]rune{'F', 'J', 'L', '7'}, t)
 }
 
 func isWithinLoop(p PipeField, t grid.Point) bool {
