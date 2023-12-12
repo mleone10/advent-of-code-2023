@@ -1,6 +1,8 @@
 package day10
 
 import (
+	"log"
+
 	"github.com/mleone10/advent-of-code-2023/internal/grid"
 	"github.com/mleone10/advent-of-code-2023/internal/slice"
 )
@@ -36,6 +38,7 @@ func (p PipeField) StepsFarthestFromStart() int {
 func (p PipeField) TilesEnclosedByLoop() int {
 	return grid.Reduce(p.field, 0, func(g grid.Grid[tile], x, y int, v tile, ret int) int {
 		if isWithinLoop(p, grid.Point{X: x, Y: y}) {
+			log.Println(x, y)
 			return ret + 1
 		}
 		return ret
@@ -70,7 +73,6 @@ func (p *PipeField) loadGrid(in string) {
 func (p *PipeField) traverseLoop(cur grid.Point) {
 	// If the loop already contains this point, do nothing.
 	if loopContains(p.loop, cur) {
-
 		return
 	}
 
@@ -132,5 +134,49 @@ func isCorner(p PipeField, cur grid.Point) bool {
 }
 
 func isWithinLoop(p PipeField, t grid.Point) bool {
-	return true
+	intersections := 0
+	for _, seg := range p.loopSegments {
+		if pointOnLine(seg, t) {
+			return false
+		}
+		if rayIntersects(seg, t) {
+			intersections++
+		}
+	}
+	return intersections%2 == 1
+}
+
+func rayIntersects(l grid.Line, p grid.Point) bool {
+	return (p.Y < l.A.Y) != (p.Y < l.B.Y) &&
+		p.X < l.A.X+((p.Y-l.A.Y)/(l.B.Y-l.A.Y))*(l.B.X-l.A.X)
+}
+
+func pointOnLine(l grid.Line, p grid.Point) bool {
+	dxp := p.X - l.A.X
+	dyp := p.Y - l.A.Y
+	dx1 := l.B.X - l.A.X
+	dy1 := l.B.Y - l.A.Y
+
+	if (dxp*dy1 - dyp*dx1) != 0 {
+		return false
+	}
+
+	if abs(dx1) >= abs(dy1) {
+		if dx1 > 0 {
+			return l.A.X <= p.X && p.X <= l.B.X
+		}
+		return l.B.X <= p.X && p.X <= l.A.X
+	} else {
+		if dy1 > 0 {
+			return l.A.Y <= p.Y && p.Y <= l.B.Y
+		}
+		return l.B.Y <= p.Y && p.Y <= l.A.Y
+	}
+}
+
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
 }
