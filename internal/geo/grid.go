@@ -16,15 +16,35 @@ func (sg *Grid[T]) Set(x, y int, v T) {
 }
 
 // Get retrieves the value in the grid at location (x, y).  If an item exists at that location, it returns it and a boolean set to true.  Otherwise, it returns the zero value of that item's type and a boolean set to false.
-func (sg *Grid[T]) Get(x, y int) (T, bool) {
+func (sg Grid[T]) Get(x, y int) (T, bool) {
 	if v, ok := sg.points[y][x]; ok {
 		return v, true
 	}
 	return *new(T), false
 }
 
-func (sg *Grid[T]) GetPoint(p Point) (T, bool) {
+func (sg Grid[T]) GetPoint(p Point) (T, bool) {
 	return sg.Get(p.X, p.Y)
+}
+
+// Width returns the value of the largest X coordinate of the grid.  Since grid coordinates are always positive integers, this gives the width of the grid.
+func (sg Grid[T]) Width() int {
+	return Reduce(sg, 0, func(g Grid[T], x int, y int, v T, maxWidth int) int {
+		if x > maxWidth {
+			return x
+		}
+		return maxWidth
+	}) + 1
+}
+
+// Height returns the value of the largest Y coordinate of the grid.  Since grid coordinates are always positive integers, this gives the height of the grid.
+func (sg Grid[T]) Height() int {
+	return Reduce(sg, 0, func(g Grid[T], x int, y int, v T, maxHeight int) int {
+		if y > maxHeight {
+			return y
+		}
+		return maxHeight
+	}) + 1
 }
 
 // Map applies the given function `f` to all elements of the grid, returning a new grid to the caller.
